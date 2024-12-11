@@ -114,3 +114,4 @@ function endGame() {
     document.getElementById('result').classList.remove('hidden'); // Mostra il risultato
     document.getElementById('final-score').textContent = `Game Over! Hai totalizzato ${score} punti su ${totalQuestions}!`;
 }
+
