@@ -29,17 +29,17 @@ body {
 }
 
 /* Titolo principale */
+/* Colore dello sfondo del titolo */
 h1 {
-    font-size: 40px;
-    font-weight: bold;
-    color: #ffffff;
-    background: linear-gradient(45deg, #FF6F61, #4CAF50);
+    background: #E6E6FA; /* Viola chiaro */
+    color: #333;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
+
 
 h1:hover {
     transform: scale(1.1);
