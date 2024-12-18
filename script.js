@@ -12,37 +12,11 @@ function shuffle(array) {
     return array;
 }
 
-// Seleziona una domanda casuale da ciascun blocco di 10
-function getQuestionsByBlocks(data, blockSize) {
-    const selected = [];
-    for (let i = 0; i < data.length; i += blockSize) {
-        const block = data.slice(i, i + blockSize);
-        if (block.length > 0) {
-            const randomQuestion = shuffle(block)[0]; // Seleziona una domanda casuale dal blocco
-            selected.push(randomQuestion);
-        }
-    }
-    return selected;
-}
-
-// Seleziona casualmente un numero specifico di domande da un array
-function getRandomQuestions(group, count) {
-    return shuffle(group).slice(0, count);
-}
-
-// Carica il file JSON
+// Carica tutte le domande in ordine casuale
 fetch('question.json')
     .then(response => response.json())
     .then(data => {
-        // Seleziona 27 domande, una per blocco di 10
-        const questionsFromBlocks = getQuestionsByBlocks(data, 10);
-
-        // Seleziona 3 domande casuali dal blocco 141-210 (indice 140-209)
-        const questionsFromSpecificBlock = getRandomQuestions(data.slice(140, 210), 3);
-
-        // Combina e mescola le domande
-        questions = shuffle([...questionsFromBlocks, ...questionsFromSpecificBlock]);
-
+        questions = shuffle(data); // Mescola tutte le domande casualmente
         startQuiz();
     })
     .catch(error => console.error('Errore nel caricamento del file JSON:', error));
