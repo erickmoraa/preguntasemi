@@ -1,7 +1,8 @@
 let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
-const totalQuestions = 30; // Numero totale di domande per quiz
+const totalQuestions = 30; // Numero totale di domande da mostrare
+let wrongQuestions = []; // Array per memorizzare le domande sbagliate
 
 // Funzione per mescolare un array
 function shuffle(array) {
@@ -12,11 +13,11 @@ function shuffle(array) {
     return array;
 }
 
-// Carica tutte le domande in ordine casuale
+// Carica tutte le domande in ordine casuale e limita a 30
 fetch('question.json')
     .then(response => response.json())
     .then(data => {
-        questions = shuffle(data); // Mescola tutte le domande casualmente
+        questions = shuffle(data).slice(0, totalQuestions); // Prendi solo 30 domande
         startQuiz();
     })
     .catch(error => console.error('Errore nel caricamento del file JSON:', error));
@@ -25,6 +26,7 @@ fetch('question.json')
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+    wrongQuestions = [];
     document.getElementById('final-score').textContent = '';
     document.getElementById('result').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
@@ -48,7 +50,7 @@ function showQuestion() {
     Object.entries(question.options).forEach(([key, answer]) => {
         const button = document.createElement('button');
         button.textContent = answer; // Mostra solo la risposta
-        button.addEventListener('click', () => checkAnswer(key));
+        button.addEventListener('click', () => checkAnswer(key, question));
         answersElement.appendChild(button);
     });
 
@@ -56,8 +58,7 @@ function showQuestion() {
 }
 
 // Controlla se la risposta selezionata è corretta
-function checkAnswer(selectedKey) {
-    const question = questions[currentQuestionIndex];
+function checkAnswer(selectedKey, question) {
     const answers = document.querySelectorAll('.answers button');
     answers.forEach(button => {
         button.disabled = true;
@@ -70,9 +71,11 @@ function checkAnswer(selectedKey) {
 
     if (selectedKey === question.correctAnswer) {
         score++;
+    } else {
+        wrongQuestions.push(question.question); // Aggiungi la domanda sbagliata
     }
 
-    document.getElementById('feedback').textContent = question.explanation;
+    document.getElementById('feedback').textContent = question.explanation || '';
     document.getElementById('next-question').classList.remove('hidden');
 }
 
@@ -87,5 +90,15 @@ document.getElementById('next-question').addEventListener('click', () => {
 function endGame() {
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
-    document.getElementById('final-score').textContent = `Game Over! Hai totalizzato ${score} punti su ${totalQuestions}!`;
+    document.getElementById('final-score').textContent = `Hai totalizzato ${score} punti su ${totalQuestions}!`;
+
+    // Mostra le domande sbagliate
+    const wrongQuestionsContainer = document.createElement('div');
+    wrongQuestionsContainer.innerHTML = `
+        <h3>Domande sbagliate:</h3>
+        <ul>
+            ${wrongQuestions.map(q => `<li>${q}</li>`).join('')}
+        </ul>
+    `;
+    document.getElementById('result').appendChild(wrongQuestionsContainer);
 }
