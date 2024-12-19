@@ -54,7 +54,7 @@ function showQuestion() {
         answersElement.appendChild(button);
     });
 
-    document.getElementById('question-counter').textContent = `Domanda ${currentQuestionIndex + 1} di ${totalQuestions}`;
+    document.getElementById('question-counter').textContent = `PREGUNTA ${currentQuestionIndex + 1} DE ${totalQuestions}`;
 }
 
 // Controlla se la risposta selezionata è corretta
@@ -90,12 +90,12 @@ document.getElementById('next-question').addEventListener('click', () => {
 function endGame() {
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
-    document.getElementById('final-score').textContent = `Hai totalizzato ${score} punti su ${totalQuestions}!`;
+    document.getElementById('final-score').textContent = `TOTAL ${score} PUNTOS SOBRE ${totalQuestions}!`;
 
     // Mostra le domande sbagliate
     const wrongQuestionsContainer = document.createElement('div');
     wrongQuestionsContainer.innerHTML = `
-        <h3>Domande sbagliate:</h3>
+        <h3>EQUIVOCADAS:</h3>
         <ul>
             ${wrongQuestions.map(q => `<li>${q}</li>`).join('')}
         </ul>
